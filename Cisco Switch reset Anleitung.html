@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cisco C9200L — Factory Reset Anleitung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f7f3ee;
+    --surface: #eeebe4;
+    --border: #ddd8cf;
+    --border-light: #e8e3da;
+    --text: #111418;
+    --text-dim: #7a7470;
+    --text-mid: #3d3a37;
+    --code-bg: #eae6de;
+    --code-border: #d0cbc0;
+    --orange: #b85c1e;
+    --orange-light: #faf0e8;
+    --orange-border: #e8c8a8;
+    --green: #1a6645;
+    --green-light: #eaf4ee;
+    --green-border: #a8d4b8;
+    --timeline-line: #d0cbc0;
+    --timeline-dot: #9a9590;
+    --step-num-bg: #9a9590;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  .page-wrap {
+    max-width: 740px;
+    margin: 0 auto;
+    padding: 56px 24px 100px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    margin-bottom: 48px;
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 8px;
+    color: var(--text-dim);
+  }
+
+  .header h1 {
+    font-family: 'Manrope', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  .header p {
+    color: var(--text-dim);
+    font-size: 14px;
+  }
+
+  /* ── PREP ── */
+  .prep-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 56px;
+  }
+
+  .prep-box h3 {
+    font-family: 'Manrope', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+  }
+
+  .prep-list { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+
+  .prep-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text-mid);
+  }
+
+  .prep-list li::before {
+    content: "✓";
+    color: var(--green);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    position: relative;
+    padding-left: 56px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 12px;
+    bottom: 40px;
+    width: 2px;
+    background: var(--timeline-line);
+  }
+
+  /* ── STEP ── */
+  .step {
+    position: relative;
+    margin-bottom: 52px;
+  }
+
+  .step:last-child { margin-bottom: 0; }
+
+  .step-dot {
+    position: absolute;
+    left: -46px;
+    top: 4px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--step-num-bg);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Manrope', sans-serif;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+
+  .step-title {
+    font-family: 'Manrope', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+
+  .step-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* ── TEXT ── */
+  p.desc {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.65;
+  }
+
+  p.desc strong { color: var(--text); font-weight: 600; }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: var(--orange);
+  }
+
+  /* ── CODE BLOCK ── */
+  .code-block {
+    position: relative;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .code-block pre {
+    padding: 18px 24px;
+    padding-right: 80px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  .copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 11px;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+  }
+
+  .copy-btn:hover { background: var(--surface); color: var(--text); border-color: var(--text-dim); }
+  .copy-btn.copied { background: var(--green-light); border-color: var(--green-border); color: var(--green); }
+
+  /* ── CALLOUTS ── */
+  .expected {
+    background: var(--green-light);
+    border: 1px solid var(--green-border);
+    border-radius: 8px;
+    padding: 11px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--green);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+  }
+
+  .expected::before { content: "✓"; font-size: 13px; flex-shrink: 0; font-weight: 700; }
+
+  .warning {
+    background: var(--orange-light);
+    border: 1px solid var(--orange-border);
+    border-radius: 8px;
+    padding: 11px 16px;
+    font-size: 13.5px;
+    color: var(--orange);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+  }
+
+  .warning::before { content: "⚠"; flex-shrink: 0; }
+
+  .or-divider {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  ol.steps { padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+  ol.steps li { font-size: 14px; color: var(--text-mid); padding-left: 4px; line-height: 1.6; }
+  ol.steps li strong { color: var(--text); }
+
+  /* ── SUCCESS ── */
+  .success-banner {
+    background: var(--green-light);
+    border: 1px solid var(--green-border);
+    border-radius: 12px;
+    padding: 22px 28px;
+  }
+
+  .success-banner h3 {
+    font-family: 'Manrope', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 5px;
+  }
+
+  .success-banner p { font-size: 13.5px; color: #2a7050; line-height: 1.55; }
+
+  /* ── TROUBLESHOOTING ── */
+  .trouble-section {
+    margin-top: 64px;
+    padding-top: 36px;
+    border-top: 1px solid var(--border);
+  }
+
+  .trouble-section h2 {
+    font-family: 'Manrope', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+
+  .trouble-item {
+    border-bottom: 1px solid var(--border-light);
+    padding: 14px 0;
+  }
+
+  .trouble-item:last-child { border-bottom: none; }
+
+  .trouble-item .problem {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--orange);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 4px;
+  }
+
+  .trouble-item .solution { font-size: 14px; color: var(--text-mid); }
+  .trouble-item .solution strong { color: var(--text); font-weight: 600; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 600px) {
+    .page-wrap { padding: 32px 16px 60px; }
+    .header h1 { font-size: 22px; }
+    .timeline { padding-left: 40px; }
+    .timeline::before { left: 13px; }
+    .step-dot { left: -32px; width: 18px; height: 18px; font-size: 10px; }
+    .code-block pre { font-size: 12.5px; padding: 14px 16px; padding-right: 70px; }
+    .copy-btn { font-size: 10px; padding: 4px 7px; }
+    .prep-box { padding: 18px 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-meta">
+      <span class="badge">Cisco Catalyst 9200L</span>
+      <span class="badge">IOS-XE 17.9.8</span>
+      <span class="badge">Getestet März 2026</span>
+    </div>
+    <h1>Factory Reset Anleitung</h1>
+    <p>Vollständiger Guide — von gesperrtem Switch zu sauberem Factory Default</p>
+  </div>
+
+  <!-- PREP -->
+  <div class="prep-box">
+    <h3>Vorbereitung — das brauchst du</h3>
+    <ul class="prep-list">
+      <li>Console-Kabel am Switch (RJ45-Port an der Rückseite)</li>
+      <li>PuTTY offen — COM-Port auswählen, Speed: <code>9600</code>, Connection Type: Serial</li>
+      <li>USB-Stick (FAT32) mit <code>cat9k_lite_iosxe.17.09.08.SPA.bin</code> im Root-Verzeichnis</li>
+      <li>USB-Stick in den Switch gesteckt</li>
+    </ul>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="timeline">
+
+    <!-- 1 -->
+    <div class="step">
+      <div class="step-dot">1</div>
+      <div class="step-title">In den ROMMON booten</div>
+      <div class="step-content">
+        <p class="desc">Ziel: Switch startet und zeigt <code>switch:</code> in PuTTY.</p>
+        <ol class="steps">
+          <li>Switch neustarten — Strom weg, wieder rein</li>
+          <li>Sofort den <strong>rechten grauen Knopf</strong> (<code>&gt;•&lt;</code> Symbol, rechts neben Cisco-Logo) gedrückt halten</li>
+          <li>Knopf halten bis PuTTY folgendes zeigt:</li>
+        </ol>
+        <div class="expected">switch:</div>
+        <div class="warning">Falls der Switch normal durchbootet: nochmal von vorne. Knopf früher drücken — direkt beim Einschalten.</div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="step">
+      <div class="step-dot">2</div>
+      <div class="step-title">Startup-Config ignorieren</div>
+      <div class="step-content">
+        <p class="desc">Damit der Switch beim nächsten Boot die alte Config (und Passwörter) ignoriert.</p>
+        <div class="code-block"><pre>set SWITCH_IGNORE_STARTUP_CFG=1</pre><button class="copy-btn" onclick="copyCode(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Kopieren</button></div>
+        <div class="expected">switch:   (kein Fehler = gut)</div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="step">
+      <div class="step-dot">3</div>
+      <div class="step-title">Vom USB booten</div>
+      <div class="step-content">
+        <p class="desc">Zuerst prüfen welcher USB-Port erkannt wird:</p>
+        <div class="code-block"><pre>dir usbflash0:</pre><button class="copy-btn" onclick="copyCode(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Kopieren</button></div>
+        <p class="desc">Falls Fehler kommt:</p>
+        <div class="code-block"><pre>dir usbflash1:</pre><button class="copy-btn" onclick="copyCode(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Kopieren</button></div>
+        <p class="desc">Du siehst die .bin Datei → booten (mit dem Port der funktioniert hat):</p>
+        <div class="code-block"><pre>boot usbflash0:cat9k_lite_iosxe.17.09.08.SPA.bin</pre><button class="copy-btn" onclick="copyCode(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Kopieren</button></div>
+        <div class="or-divider">— oder —</div>
+        <div class="code-block"><pre>boot usbflash1:cat9k_lite_iosxe.17.09.08.SPA.bin</pre><button class="copy-btn" onclick="copyCode(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Kopieren</button></div>
+        <p class="desc">Viele <strong>####</strong> erscheinen → dauert ~3 Min. Enter drücken wenn <code>Press RETURN to get started!</code> erscheint.</p>
+        <div class="expected">Switch&gt;   (kein Login nötig)</div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="step">
+      <div class="step-dot">4</div>
+      <div class="step-title">Config löschen</div>
+      <div class="step-content">
+        <div class="code-block"><pre>enable
+write erase</pre><button class="copy-btn" onclick="copyCode(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Kopieren</button></div>
+        <p class="desc">Bestätigung mit Enter.</p>
+        <div class="expected">Erase of nvram: complete</div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="step">
+      <div class="step-dot">5</div>
+      <div class="step-title">Factory Reset durchführen</div>
+      <div class="step-content">
+        <div class="warning">USB-Stick vorher rausziehen! Dann formatiert der Switch nur seine interne Flash — der Stick bleibt unberührt.</div>
+        <div class="code-block"><pre>factory-reset all</pre><button class="copy-btn" onclick="copyCode(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Kopieren</button></div>
+        <p class="desc">Er fragt zweimal nach Bestätigung → jeweils <strong>Enter</strong> drücken. Dauert ~3 Min.</p>
+        <div class="expected">switch:   (Switch ist jetzt komplett clean)</div>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="step">
+      <div class="step-dot">6</div>
+      <div class="step-title">Wieder vom USB booten</div>
+      <div class="step-content">
+        <p class="desc">USB-Stick wieder rein stecken. Dann USB-Port prüfen (wie Schritt 3) und booten:</p>
+        <div class="code-block"><pre>boot usbflash0:cat9k_lite_iosxe.17.09.08.SPA.bin</pre><button class="copy-btn" onclick="copyCode(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Kopieren</button></div>
+        <div class="or-divider">— oder —</div>
+        <div class="code-block"><pre>boot usbflash1:cat9k_lite_iosxe.17.09.08.SPA.bin</pre><button class="copy-btn" onclick="copyCode(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Kopieren</button></div>
+        <p class="desc">Switch bootet (~3 Min). Enter drücken wenn <code>Press RETURN to get started!</code> erscheint.</p>
+        <div class="expected">Switch&gt;</div>
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="step">
+      <div class="step-dot">7</div>
+      <div class="step-title">Setup-Wizard & Enable-Passwort vergeben</div>
+      <div class="step-content">
+        <p class="desc">Der Switch fragt beim ersten Start:</p>
+        <div class="expected">Would you like to enter the initial configuration dialog? [yes/no]:</div>
+        <p class="desc">→ <strong>no</strong> eingeben und Enter drücken</p>
+        <p class="desc">Dann fragt er nach einem neuen Enable-Passwort (mind. 10 Zeichen, 1 Großbuchstabe, 1 Zahl) — vergib eines und bestätige es. Danach erscheint:</p>
+        <div class="expected">[2] Save this configuration to nvram and exit.</div>
+        <p class="desc">→ <strong>2</strong> eingeben</p>
+        <div class="expected">Switch&gt;</div>
+      </div>
+    </div>
+
+    <!-- 7b -->
+    <div class="step">
+      <div class="step-dot">8</div>
+      <div class="step-title">Enable-Passwort direkt wieder entfernen</div>
+      <div class="step-content">
+        <p class="desc">Da wir keinen Passwortschutz wollen, entfernen wir es direkt:</p>
+        <div class="code-block"><pre>enable
+conf t
+no enable secret
+end
+write memory</pre><button class="copy-btn" onclick="copyCode(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Kopieren</button></div>
+        <p class="desc">Falls er nach einem Passwort fragt → <strong>Enter</strong> drücken (leer lassen). Ab jetzt geht <code>enable</code> ohne Passwort.</p>
+      </div>
+    </div>
+
+    <!-- 9 -->
+    <div class="step">
+      <div class="step-dot">9</div>
+      <div class="step-title">IOS auf Flash kopieren</div>
+      <div class="step-content">
+        <p class="desc">Damit der Switch ohne USB booten kann:</p>
+        <div class="code-block"><pre>enable
+copy usbflash0:cat9k_lite_iosxe.17.09.08.SPA.bin flash:</pre><button class="copy-btn" onclick="copyCode(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Kopieren</button></div>
+        <div class="or-divider">— oder mit usbflash1 —</div>
+        <div class="code-block"><pre>enable
+copy usbflash1:cat9k_lite_iosxe.17.09.08.SPA.bin flash:</pre><button class="copy-btn" onclick="copyCode(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Kopieren</button></div>
+        <div class="warning">Falls Invalid input → usbflash1: statt usbflash0: verwenden (oder umgekehrt)</div>
+        <p class="desc">Bei der Dateinamenfrage einfach <strong>Enter</strong> drücken. Dauert ~3 Min.</p>
+        <div class="expected">474388619 bytes copied in XX secs</div>
+      </div>
+    </div>
+
+    <!-- 10 -->
+    <div class="step">
+      <div class="step-dot">10</div>
+      <div class="step-title">Boot von Flash konfigurieren & speichern</div>
+      <div class="step-content">
+        <div class="code-block"><pre>conf t
+boot system flash:cat9k_lite_iosxe.17.09.08.SPA.bin
+end
+write memory</pre><button class="copy-btn" onclick="copyCode(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Kopieren</button></div>
+        <div class="expected">Building configuration... [OK]</div>
+        <p class="desc">USB-Stick rausziehen, dann neustarten:</p>
+        <div class="code-block"><pre>reload</pre><button class="copy-btn" onclick="copyCode(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Kopieren</button></div>
+        <p class="desc">→ Enter bestätigen</p>
+      </div>
+    </div>
+
+    <!-- 11 -->
+    <div class="step">
+      <div class="step-dot">11</div>
+      <div class="step-title">Erfolgreich testen</div>
+      <div class="step-content">
+        <div class="code-block"><pre>enable
+show version | include System image</pre><button class="copy-btn" onclick="copyCode(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Kopieren</button></div>
+        <div class="expected">System image file is "flash:cat9k_lite_iosxe.17.09.08.SPA.bin"</div>
+        <div class="success-banner">
+          <h3>Fertig ✓</h3>
+          <p>Steht da <strong>flash:</strong> (nicht usbflash) → Switch ist auf Factory Default, bootet eigenständig und hat keine Passwörter. Bereit für den nächsten Switch!</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /timeline -->
+
+  <!-- TROUBLESHOOTING -->
+  <div class="trouble-section">
+    <h2>Troubleshooting</h2>
+    <div class="trouble-item">
+      <div class="problem">dir usbflash0: gibt Fehler</div>
+      <div class="solution">→ <strong>usbflash1:</strong> statt usbflash0: verwenden (und umgekehrt)</div>
+    </div>
+    <div class="trouble-item">
+      <div class="problem">ERROR: Integrity Check Failed</div>
+      <div class="solution">→ Die .bin Datei auf dem USB ist beschädigt. Datei nochmal kopieren, <strong>sicher auswerfen</strong>, nochmal booten.</div>
+    </div>
+    <div class="trouble-item">
+      <div class="problem">Switch landet immer im ROMMON</div>
+      <div class="solution">→ packages.conf fehlt/kaputt. Einfach vom USB booten und Schritt 8–9 durchführen.</div>
+    </div>
+    <div class="trouble-item">
+      <div class="problem">media drive "usbflash0:" not present</div>
+      <div class="solution">→ USB-Stick nochmal raus und rein stecken, dann <strong>dir usbflash0:</strong> nochmal probieren.</div>
+    </div>
+    <div class="trouble-item">
+      <div class="problem">copy ... flash: → Invalid input</div>
+      <div class="solution">→ Den anderen USB-Port verwenden: usbflash0 ↔ usbflash1 tauschen.</div>
+    </div>
+  </div>
+
+</div>
+<script>
+function copyCode(btn) {
+  const pre = btn.previousElementSibling;
+  const text = pre.textContent.trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Kopiert!`;
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Kopieren`;
+    }, 2000);
+  });
+}
+</script>
+</body>
+</html>
