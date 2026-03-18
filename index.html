@@ -314,6 +314,35 @@
     color: var(--text);
   }
 
+  .header-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .header-left { flex: 1; }
+
+  .download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--text);
+    color: var(--bg);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 8px;
+    white-space: nowrap;
+    transition: opacity 0.15s;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+
+  .download-btn:hover { opacity: 0.75; }
+
   .trouble-item {
     border-bottom: 1px solid var(--border-light);
     padding: 14px 0;
@@ -350,13 +379,21 @@
 
   <!-- HEADER -->
   <div class="header">
-    <div class="header-meta">
-      <span class="badge">Cisco Catalyst 9200L</span>
-      <span class="badge">IOS-XE 17.9.8</span>
-      <span class="badge">Getestet März 2026</span>
+    <div class="header-top">
+      <div class="header-left">
+        <div class="header-meta">
+          <span class="badge">Cisco Catalyst 9200L</span>
+          <span class="badge">IOS-XE 17.9.8</span>
+          <span class="badge">Getestet März 2026</span>
+        </div>
+        <h1>Factory Reset Anleitung</h1>
+        <p>Vollständiger Guide — von gesperrtem Switch zu sauberem Factory Default</p>
+      </div>
+      <a class="download-btn" href="https://www.dropbox.com/scl/fi/9zclxcaoxipfezoheu80d/cat9k_lite_iosxe.17.09.08.SPA.bin?rlkey=5sedf20pww30qmvmj2p2m0665&st=a8vqaq6x&dl=1" download>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        IOS herunterladen
+      </a>
     </div>
-    <h1>Factory Reset Anleitung</h1>
-    <p>Vollständiger Guide — von gesperrtem Switch zu sauberem Factory Default</p>
   </div>
 
   <!-- PREP -->
